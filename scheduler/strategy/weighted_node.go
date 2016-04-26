@@ -3,6 +3,7 @@ package strategy
 import (
 	"github.com/docker/swarm/cluster"
 	"github.com/docker/swarm/scheduler/node"
+	log "github.com/Sirupsen/logrus"
 )
 
 // WeightedNode represents a node in the cluster with a given weight, typically used for sorting

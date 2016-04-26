@@ -5,6 +5,7 @@ import (
 
 	"github.com/docker/swarm/cluster"
 	"github.com/docker/swarm/scheduler/node"
+	log "github.com/Sirupsen/logrus"
 )
 
 // SpreadPlacementStrategy places a container on the node with the fewest running containers.
