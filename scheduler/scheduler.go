@@ -9,6 +9,7 @@ import (
 	"github.com/docker/swarm/scheduler/filter"
 	"github.com/docker/swarm/scheduler/node"
 	"github.com/docker/swarm/scheduler/strategy"
+	log "github.com/Sirupsen/logrus"
 )
 
 var (
