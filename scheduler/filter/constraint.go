@@ -36,17 +36,17 @@ func (f *ConstraintFilter) Filter(config *cluster.ContainerConfig, nodes []*node
 			case "node":
 				// "node" label is a special case pinning a container to a specific node.
 				if constraint.Match(node.ID, node.Name) {
-					log.Debugf("id: %s node constraint matched id: %s name: %s", config.Labels["com.docker.swarm.id"], node.ID, node.Name)
+					log.Debugf("id: %s NODE constraint matched name: %s", config.Labels["com.docker.swarm.id"], node.Name)
 					candidates = append(candidates, node)
 				} else {
-					log.Debugf("id: %s node constraint NOT matched id: %s name: %s", config.Labels["com.docker.swarm.id"], node.ID, node.Name)
+					log.Debugf("id: %s NODE constraint NOT matched name: %s", config.Labels["com.docker.swarm.id"], node.Name)
 				}
 			default:
 				if constraint.Match(node.Labels[constraint.key]) {
-					log.Debugf("id: %s node constraint matched name: %s", config.Labels["com.docker.swarm.id"], node.Labels[constraint.key])
+					log.Debugf("id: %s normal constraint matched name: %s", config.Labels["com.docker.swarm.id"], node.Labels[constraint.key])
 					candidates = append(candidates, node)
 				} else {
-					log.Debugf("id: %s node constraint NOT matched name: %s", config.Labels["com.docker.swarm.id"], node.Labels[constraint.key])
+					log.Debugf("id: %s normal constraint NOT matched name: %s", config.Labels["com.docker.swarm.id"], node.Labels[constraint.key])
 				}
 			}
 		}
