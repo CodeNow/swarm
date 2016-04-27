@@ -29,7 +29,7 @@ func (p *SpreadPlacementStrategy) RankAndSort(config *cluster.ContainerConfig, n
 	const healthFactor int64 = -10
 	weightedNodes, err := weighNodes(config, nodes, healthFactor)
 	if err != nil {
-		log.WithFields(log.Fields{ "numNode": len(nodes) }).Debugf("XXXX: RankAndSort")
+		log.WithFields(log.Fields{ "swarmID": config.Labels["com.docker.swarm.id"], "numNode": len(nodes) }).Debugf("XXXX: RankAndSort")
 		return nil, err
 	}
 

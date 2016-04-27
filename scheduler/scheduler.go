@@ -38,18 +38,19 @@ func (s *Scheduler) SelectNodesForContainer(nodes []*node.Node, config *cluster.
 	candidates, err := s.selectNodesForContainer(nodes, config, true)
 
 	if err != nil {
-		log.WithFields(log.Fields{ "numNode": len(nodes) }).Debugf("XXXX: SelectNodesForContainer")
+		log.WithFields(log.Fields{ "swarmID": config.Labels["com.docker.swarm.id"], "numNode": len(nodes) }).Debugf("XXXX: SelectNodesForContainer part 1")
 		candidates, err = s.selectNodesForContainer(nodes, config, false)
 	}
 
 	if err != nil {
-		log.WithFields(log.Fields{ "numNode": len(nodes) }).Debugf("XXXX: SelectNodesForContainer part 2")
+		log.WithFields(log.Fields{ "swarmID": config.Labels["com.docker.swarm.id"], "numNode": len(nodes) }).Debugf("XXXX: SelectNodesForContainer part 2")
 	}
 	return candidates, err
 }
 
 func (s *Scheduler) selectNodesForContainer(nodes []*node.Node, config *cluster.ContainerConfig, soft bool) ([]*node.Node, error) {
 	accepted, err := filter.ApplyFilters(s.filters, config, nodes, soft)
+	log.WithFields(log.Fields{ "swarmID": config.Labels["com.docker.swarm.id"], "numAccepted": len(accepted) }).Debugf("XXXX: selectNodesForContainer filtered")
 	if err != nil {
 		return nil, err
 	}

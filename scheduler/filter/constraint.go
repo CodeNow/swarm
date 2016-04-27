@@ -25,10 +25,10 @@ func (f *ConstraintFilter) Filter(config *cluster.ContainerConfig, nodes []*node
 	}
 
 	for _, constraint := range constraints {
+		log.Debugf("id: %s matching constraint: %s%s%s (soft=%t) enable soft = %t", config.Labels["com.docker.swarm.id"], constraint.key, OPERATORS[constraint.operator], constraint.value, constraint.isSoft, soft)
 		if !soft && constraint.isSoft {
 			continue
 		}
-		log.Debugf("matching constraint: %s%s%s (soft=%t)", constraint.key, OPERATORS[constraint.operator], constraint.value, constraint.isSoft)
 
 		candidates := []*node.Node{}
 		for _, node := range nodes {
@@ -36,11 +36,17 @@ func (f *ConstraintFilter) Filter(config *cluster.ContainerConfig, nodes []*node
 			case "node":
 				// "node" label is a special case pinning a container to a specific node.
 				if constraint.Match(node.ID, node.Name) {
+					log.Debugf("id: %s node constraint matched id: %s name: %s", config.Labels["com.docker.swarm.id"], node.ID, node.Name)
 					candidates = append(candidates, node)
+				} else {
+					log.Debugf("id: %s node constraint NOT matched id: %s name: %s", config.Labels["com.docker.swarm.id"], node.ID, node.Name)
 				}
 			default:
 				if constraint.Match(node.Labels[constraint.key]) {
+					log.Debugf("id: %s node constraint matched name: %s", config.Labels["com.docker.swarm.id"], node.Labels[constraint.key])
 					candidates = append(candidates, node)
+				} else {
+					log.Debugf("id: %s node constraint NOT matched name: %s", config.Labels["com.docker.swarm.id"], node.Labels[constraint.key])
 				}
 			}
 		}

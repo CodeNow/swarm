@@ -46,7 +46,7 @@ func weighNodes(config *cluster.ContainerConfig, nodes []*node.Node, healthiness
 
 		// Skip nodes that are smaller than the requested resources.
 		if nodeMemory < int64(config.Memory) || nodeCpus < config.CpuShares {
-			log.WithFields(log.Fields{ "nodeMemory": nodeMemory }).Debugf("XXXX: weighNodes SKIPPING")
+			log.WithFields(log.Fields{ "swarmID": config.Labels["com.docker.swarm.id"], "nodeMemory": nodeMemory }).Debugf("XXXX: weighNodes SKIPPING")
 			continue
 		}
 
@@ -89,10 +89,10 @@ func weighNodes(config *cluster.ContainerConfig, nodes []*node.Node, healthiness
 				memoryScore = (node.UsedMemory + config.Memory) * 100 / nodeMemory
 			}
 
-			log.WithFields(log.Fields{ "cpuScore": cpuScore, "memoryScore": memoryScore, "IP": node.IP, "UsedMemory": node.UsedMemory, "UsedCpus": node.UsedCpus, "TotalMemory": node.TotalMemory, "TotalCpus": node.TotalCpus, "HealthIndicator": node.HealthIndicator, "numContainers": len(node.Containers) }).Debugf("XXXX: weighNodes loop")
+			log.WithFields(log.Fields{ "swarmID": config.Labels["com.docker.swarm.id"], "cpuScore": cpuScore, "memoryScore": memoryScore, "IP": node.IP, "UsedMemory": node.UsedMemory, "UsedCpus": node.UsedCpus, "TotalMemory": node.TotalMemory, "TotalCpus": node.TotalCpus, "HealthIndicator": node.HealthIndicator, "numContainers": len(node.Containers) }).Debugf("XXXX: weighNodes loop")
 		}
 
-		log.WithFields(log.Fields{ "numNode": len(nodes), "reqMemory": config.Memory, "reqCpu": config.CpuShares }).Debugf("XXXX: ErrNoResourcesAvailable")
+		log.WithFields(log.Fields{ "swarmID": config.Labels["com.docker.swarm.id"], "numNode": len(nodes), "reqMemory": config.Memory, "reqCpu": config.CpuShares }).Debugf("XXXX: ErrNoResourcesAvailable")
 		return nil, ErrNoResourcesAvailable
 	}
 

@@ -193,7 +193,7 @@ func (c *Cluster) createContainer(config *cluster.ContainerConfig, name string, 
 	nodes, err := c.scheduler.SelectNodesForContainer(listedNodes, config)
 
 	if err != nil {
-		log.WithFields(log.Fields{"numListedNodes": len(listedNodes) }).Debugf("XXXX: createContainer")
+		log.WithFields(log.Fields{"swarmID": config.Labels["com.docker.swarm.id"], "numListedNodes": len(listedNodes), "withImageAffinity": withImageAffinity }).Debugf("XXXX: createContainer")
 	}
 
 	if withImageAffinity {
