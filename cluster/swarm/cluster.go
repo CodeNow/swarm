@@ -190,10 +190,11 @@ func (c *Cluster) createContainer(config *cluster.ContainerConfig, name string, 
 	}
 
 	listedNodes := c.listNodes()
+	log.WithFields(log.Fields{"swarmID": config.Labels["com.docker.swarm.id"], "Image": config.Image, "numListedNodes": len(listedNodes), "withImageAffinity": withImageAffinity }).Debugf("XXXX: createContainer")
 	nodes, err := c.scheduler.SelectNodesForContainer(listedNodes, config)
 
 	if err != nil {
-		log.WithFields(log.Fields{"swarmID": config.Labels["com.docker.swarm.id"], "numListedNodes": len(listedNodes), "withImageAffinity": withImageAffinity }).Debugf("XXXX: createContainer")
+		log.WithFields(log.Fields{"swarmID": config.Labels["com.docker.swarm.id"]}).Debugf("XXXX: createContainer failed OOR")
 	}
 
 	if withImageAffinity {
