@@ -139,17 +139,22 @@ func (c *Cluster) StartContainer(container *cluster.Container, hostConfig *docke
 
 // CreateContainer aka schedule a brand new container into the cluster.
 func (c *Cluster) CreateContainer(config *cluster.ContainerConfig, name string, authConfig *dockerclient.AuthConfig) (*cluster.Container, error) {
+	log.Debugf("CreateContainer 1 Image: %s", config.Image)
 	container, err := c.createContainer(config, name, false, authConfig)
 
 	if err != nil {
 		var retries int64
-		//  fails with image not found, then try to reschedule with image affinity
+		// fails with image not found, then try to reschedule with image affinity
+		log.Debugf("CreateContainer ERROR Image: %s id: %s err: %s", config.Image, config.Labels["com.docker.swarm.id"], err)
+
 		bImageNotFoundError, _ := regexp.MatchString(`image \S* not found`, err.Error())
 		if bImageNotFoundError && !config.HaveNodeConstraint() {
 			// Check if the image exists in the cluster
 			// If exists, retry with a image affinity
 			if c.Image(config.Image) != nil {
+				log.Debugf("CreateContainer 2 id: %s err: %s", config.Labels["com.docker.swarm.id"], err)
 				container, err = c.createContainer(config, name, true, authConfig)
+				log.Debugf("CreateContainer 3 id: %s err: %s", config.Labels["com.docker.swarm.id"], err)
 				retries++
 			}
 		}
