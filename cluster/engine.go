@@ -834,7 +834,7 @@ func (e *Engine) UsedMemory() int64 {
 	var r int64
 	e.RLock()
 	for _, c := range e.containers {
-		r += c.Config.HostConfig.Memory
+		r += c.Config.HostConfig.MemoryReservation
 	}
 	e.RUnlock()
 	return r
